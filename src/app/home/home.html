@@ -1,6 +1,6 @@
 <div class="min-h-screen bg-[#FDFBF7] font-sans text-gray-800">
 
-  <!-- Navigation -->
+  <!-- Navbar -->
   <nav class="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
     <div class="flex items-center gap-2">
       <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
@@ -9,6 +9,7 @@
       <span class="font-bold text-xl tracking-tight">Harmony Haven</span>
     </div>
     <div class="flex gap-6 items-center">
+      <!-- Navigation Links -->
       <a routerLink="/login" class="text-sm font-medium hover:text-[#FF7D54]">Sign In</a>
       <button routerLink="/register" class="bg-gray-900 text-white px-5 py-2 rounded-full text-sm hover:bg-black transition-colors">
         Get Started
@@ -16,7 +17,7 @@
     </div>
   </nav>
 
-  <!-- Main Content -->
+  <!-- Main Section -->
   <main class="max-w-5xl mx-auto pt-16 pb-24 px-6 text-center">
     <h2 class="text-5xl md:text-6xl font-serif leading-tight mb-6">
       Where every act of <br> kindness brings <span class="italic text-gray-400">guidance.</span>
@@ -27,7 +28,7 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
 
-      <!-- Browse Doctors Button -->
+      <!-- Browse Doctors Card -->
       <div class="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-md transition-shadow group flex flex-col">
         <div class="flex-1">
           <div class="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:bg-blue-50 transition-colors">
@@ -37,14 +38,13 @@
           <p class="text-gray-500 mb-8">I know which professional I want to speak with today.</p>
         </div>
         <button routerLink="/login"
-                class="w-full py-3 rounded-2xl font-bold 
-                       bg-white text-gray-900 border-2 border-gray-900 
-                       hover:bg-gray-900 hover:text-white transition-colors">
+                class="w-full border-2 border-gray-900 py-3 rounded-2xl font-bold 
+                       bg-gray-900 text-white hover:bg-gray-700 transition-all">
           Browse Doctors
         </button>
       </div>
 
-      <!-- Start Quiz Button -->
+      <!-- AI Assessment Card -->
       <div class="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-md transition-shadow group flex flex-col">
         <div class="flex-1">
           <div class="w-12 h-12 bg-[#FF7D54] rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg shadow-orange-100">
@@ -53,10 +53,8 @@
           <h3 class="text-2xl font-bold mb-3">AI Assessment</h3>
           <p class="text-gray-500 mb-8">Not sure? Let our intelligent quiz recommend the best fit for your needs.</p>
         </div>
-        <button routerLink="/login"
-                class="w-full py-3 rounded-2xl font-bold 
-                       bg-[#FF7D54] text-white 
-                       hover:bg-[#e66a45] transition-colors shadow-lg shadow-orange-50">
+        <button routerLink="/login" 
+                class="w-full bg-[#FF7D54] text-white py-3 rounded-2xl font-bold hover:bg-[#e66a45] transition-all shadow-lg shadow-orange-50">
           Start Quiz
         </button>
       </div>
@@ -68,5 +66,4 @@
   <footer class="text-center py-10 border-t border-gray-100 opacity-40 text-sm">
     © 2025 Harmony Haven. Gentle care for your mind.
   </footer>
-
 </div>

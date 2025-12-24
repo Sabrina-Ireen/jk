@@ -3,15 +3,15 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  api = 'https://localhost:7051/api/Auth'; // Replace with your backend
+  private apiUrl = 'https://localhost:7051/api/Auth';
 
   constructor(private http: HttpClient) {}
 
   register(data: any) {
-    return this.http.post(`${this.api}/register`, data);
+    return this.http.post(`${this.apiUrl}/register`, data);
   }
 
   login(data: any) {
-    return this.http.post(`${this.api}/login`, data);
+    return this.http.post(`${this.apiUrl}/login`, data);
   }
 }
