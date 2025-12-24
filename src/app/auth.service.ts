@@ -1,11 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  api = 'https://localhost:7051/api/Auth';
+  api = 'https://localhost:7051/api/Auth'; // Replace with your backend
 
   constructor(private http: HttpClient) {}
 
