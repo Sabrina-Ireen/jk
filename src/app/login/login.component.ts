@@ -1,31 +1,45 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.html'
 })
 export class LoginComponent {
-  model = { email: '', password: '' };
+  model = {
+    email: '',
+    password: ''
+  };
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) {}
 
-  login() {
-  this.authService.login(this.model).subscribe({
-    next: (res: any) => {
-      alert(res.message); // show backend message
-      this.router.navigate(['/home']);
-    },
-    error: (err) => {
-      console.error(err);           // show full error
-      alert(err.error || 'Login failed'); // show backend error if exists
+  login(): void {
+    if (!this.model.email || !this.model.password) {
+      alert('Email and password are required');
+      return;
     }
-  });
-}
-}
 
+    this.auth.login(this.model).subscribe({
+      next: (res: any) => {
+        localStorage.setItem('user', JSON.stringify(res));
+
+        if (res.role === 'Patient') {
+          this.router.navigate(['/patient-dashboard']);
+        } else {
+          this.router.navigate(['/home']);
+        }
+      },
+      error: (err: any) => {
+        alert(err?.error?.message || 'Login failed');
+      }
+    });
+  }
+}
