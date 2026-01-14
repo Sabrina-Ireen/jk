@@ -1,0 +1,65 @@
+<div class="p-6 space-y-4">
+  <h1 class="text-3xl font-bold mb-4">Patients</h1>
+
+  <div class="flex justify-end mb-4">
+    <button (click)="openAddPatientForm()"
+      class="bg-[#FF7D54] text-white px-4 py-2 rounded-2xl hover:bg-[#e66a45] transition">
+      + Add Patient
+    </button>
+  </div>
+
+  <div class="overflow-x-auto bg-white shadow rounded-lg">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-4 py-2 text-left text-gray-500 uppercase">ID</th>
+          <th class="px-4 py-2 text-left text-gray-500 uppercase">Name</th>
+          <th class="px-4 py-2 text-left text-gray-500 uppercase">Email</th>
+          <th class="px-4 py-2 text-left text-gray-500 uppercase">Created At</th>
+          <th class="px-4 py-2 text-left text-gray-500 uppercase">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <tr *ngFor="let patient of patients">
+          <td class="px-4 py-2">{{ patient.Id }}</td>
+          <td class="px-4 py-2">{{ patient.FullName }}</td>
+          <td class="px-4 py-2">{{ patient.Email }}</td>
+          <td class="px-4 py-2">{{ patient.CreatedAt | date:'short' }}</td>
+          <td class="px-4 py-2 space-x-2">
+            <button (click)="openEditPatientForm(patient)"
+              class="px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600">Edit</button>
+            <button (click)="deletePatient(patient.Id)"
+              class="px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add Patient Modal -->
+  <div *ngIf="showAddPatientModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96">
+      <h2 class="text-xl font-bold mb-4">Add Patient</h2>
+      <input [(ngModel)]="newPatient.FullName" placeholder="Full Name" class="w-full mb-2 p-2 border rounded"/>
+      <input [(ngModel)]="newPatient.Email" placeholder="Email" class="w-full mb-2 p-2 border rounded"/>
+      <input [(ngModel)]="newPatient.Password" placeholder="Password" type="password" class="w-full mb-2 p-2 border rounded"/>
+      <div class="flex justify-end space-x-2">
+        <button (click)="closeModal()" class="px-4 py-2 rounded bg-gray-400 text-white">Cancel</button>
+        <button (click)="addPatient()" class="px-4 py-2 rounded bg-green-500 text-white">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Patient Modal -->
+  <div *ngIf="showEditPatientModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96">
+      <h2 class="text-xl font-bold mb-4">Edit Patient</h2>
+      <input [(ngModel)]="editPatient.FullName" placeholder="Full Name" class="w-full mb-2 p-2 border rounded"/>
+      <input [(ngModel)]="editPatient.Email" placeholder="Email" class="w-full mb-2 p-2 border rounded"/>
+      <div class="flex justify-end space-x-2">
+        <button (click)="closeModal()" class="px-4 py-2 rounded bg-gray-400 text-white">Cancel</button>
+        <button (click)="updatePatient()" class="px-4 py-2 rounded bg-blue-500 text-white">Update</button>
+      </div>
+    </div>
+  </div>
+</div>

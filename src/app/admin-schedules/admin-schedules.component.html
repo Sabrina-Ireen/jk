@@ -1,0 +1,120 @@
+<div class="p-6 space-y-4">
+  <h1 class="text-3xl font-bold mb-4">Schedules</h1>
+
+  <!-- Add button -->
+  <div class="flex justify-end mb-4">
+    <button
+      (click)="openAddScheduleForm()"
+      class="bg-[#FF7D54] text-white px-4 py-2 rounded-2xl hover:bg-[#e66a45] transition">
+      + Add Schedule
+    </button>
+  </div>
+
+  <!-- Schedules Table -->
+  <div class="overflow-x-auto bg-white shadow rounded-lg">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-4 py-2 text-left text-gray-500 uppercase">ID</th>
+          <th class="px-4 py-2 text-left text-gray-500 uppercase">Doctor</th>
+          <th class="px-4 py-2 text-left text-gray-500 uppercase">Day</th>
+          <th class="px-4 py-2 text-left text-gray-500 uppercase">Start Time</th>
+          <th class="px-4 py-2 text-left text-gray-500 uppercase">End Time</th>
+          <th class="px-4 py-2 text-left text-gray-500 uppercase">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-gray-200">
+        <tr *ngFor="let s of schedules">
+          <td class="px-4 py-2">{{ s.ScheduleId }}</td>
+          <td class="px-4 py-2">{{ s.DoctorName }}</td>
+          <td class="px-4 py-2">{{ s.Day }}</td>
+          <td class="px-4 py-2">{{ s.StartTime }}</td>
+          <td class="px-4 py-2">{{ s.EndTime }}</td>
+          <td class="px-4 py-2 space-x-2">
+            <button
+              (click)="openEditScheduleForm(s)"
+              class="px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600">
+              Edit
+            </button>
+            <button
+              (click)="deleteSchedule(s.ScheduleId)"
+              class="px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ADD MODAL -->
+  <div *ngIf="showAddScheduleModal"
+       class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white p-6 rounded-lg w-96 space-y-4">
+      <h2 class="text-xl font-bold">Add Schedule</h2>
+
+      <input [(ngModel)]="newSchedule.doctorId"
+             placeholder="Doctor ID"
+             class="w-full border p-2 rounded">
+
+      <input [(ngModel)]="newSchedule.day"
+             placeholder="Day"
+             class="w-full border p-2 rounded">
+
+      <input [(ngModel)]="newSchedule.startTime"
+             placeholder="Start Time"
+             class="w-full border p-2 rounded">
+
+      <input [(ngModel)]="newSchedule.endTime"
+             placeholder="End Time"
+             class="w-full border p-2 rounded">
+
+      <div class="flex justify-end space-x-2">
+        <button (click)="closeModal()"
+                class="px-4 py-2 rounded bg-gray-300">
+          Cancel
+        </button>
+        <button (click)="addSchedule()"
+                class="px-4 py-2 rounded bg-[#FF7D54] text-white">
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div *ngIf="showEditScheduleModal"
+       class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white p-6 rounded-lg w-96 space-y-4">
+      <h2 class="text-xl font-bold">Edit Schedule</h2>
+
+      <input [(ngModel)]="editSchedule.doctorId"
+             placeholder="Doctor ID"
+             class="w-full border p-2 rounded">
+
+      <input [(ngModel)]="editSchedule.day"
+             placeholder="Day"
+             class="w-full border p-2 rounded">
+
+      <input [(ngModel)]="editSchedule.startTime"
+             placeholder="Start Time"
+             class="w-full border p-2 rounded">
+
+      <input [(ngModel)]="editSchedule.endTime"
+             placeholder="End Time"
+             class="w-full border p-2 rounded">
+
+      <div class="flex justify-end space-x-2">
+        <button (click)="closeModal()"
+                class="px-4 py-2 rounded bg-gray-300">
+          Cancel
+        </button>
+        <button (click)="updateSchedule()"
+                class="px-4 py-2 rounded bg-blue-500 text-white">
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

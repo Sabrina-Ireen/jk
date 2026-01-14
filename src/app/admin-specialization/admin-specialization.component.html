@@ -1,0 +1,95 @@
+<div class="min-h-screen p-8">
+
+  <!-- Page Header -->
+  <div class="mb-10">
+    <h1 class="text-4xl font-serif font-bold text-gray-900">
+      Specializations <span class="text-[#FF7D54]">Management</span>
+    </h1>
+    <p class="text-gray-500 mt-2">
+      Manage all medical specializations in your system
+    </p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+
+    <!-- Total Specializations -->
+    <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
+        Total Specializations
+      </p>
+      <h2 class="text-4xl font-bold mt-3 text-gray-900">
+        {{ specializations.length }}
+      </h2>
+    </div>
+
+  </div>
+
+  <!-- Specializations Table -->
+  <div class="overflow-x-auto bg-white shadow rounded-[2.5rem] border border-gray-100">
+
+    <div class="p-8 flex justify-between items-center border-b border-gray-50">
+      <h3 class="text-2xl font-bold text-gray-900">Specializations List</h3>
+      <button (click)="openAddSpecializationForm()"
+        class="bg-[#FF7D54] text-white px-4 py-2 rounded-2xl hover:bg-[#e66a45] transition">
+        + Add Specialization
+      </button>
+    </div>
+
+    <div class="p-8 overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 text-left text-gray-500 uppercase">ID</th>
+            <th class="px-4 py-2 text-left text-gray-500 uppercase">Name</th>
+            <th class="px-4 py-2 text-left text-gray-500 uppercase">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <tr *ngFor="let spec of specializations">
+            <td class="px-4 py-2">{{ spec.id }}</td>
+            <td class="px-4 py-2">{{ spec.name }}</td>
+            <td class="px-4 py-2 space-x-2">
+              <button (click)="openEditSpecializationForm(spec)"
+                class="px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600">Edit</button>
+              <button (click)="deleteSpecialization(spec.id)"
+                class="px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600">Delete</button>
+            </td>
+          </tr>
+
+          <!-- Empty state -->
+          <tr *ngIf="specializations.length === 0">
+            <td colspan="3" class="py-6 text-center text-gray-400 italic">
+              No specializations available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Add Specialization Modal -->
+  <div *ngIf="showAddSpecializationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96">
+      <h2 class="text-xl font-bold mb-4">Add Specialization</h2>
+      <input [(ngModel)]="newSpecialization.name" placeholder="Specialization Name" class="w-full mb-4 p-2 border rounded"/>
+      <div class="flex justify-end space-x-2">
+        <button (click)="closeModal()" class="px-4 py-2 rounded bg-gray-400 text-white">Cancel</button>
+        <button (click)="addSpecialization()" class="px-4 py-2 rounded bg-green-500 text-white">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Specialization Modal -->
+  <div *ngIf="showEditSpecializationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96">
+      <h2 class="text-xl font-bold mb-4">Edit Specialization</h2>
+      <input [(ngModel)]="editSpecialization.name" placeholder="Specialization Name" class="w-full mb-4 p-2 border rounded"/>
+      <div class="flex justify-end space-x-2">
+        <button (click)="closeModal()" class="px-4 py-2 rounded bg-gray-400 text-white">Cancel</button>
+        <button (click)="updateSpecialization()" class="px-4 py-2 rounded bg-blue-500 text-white">Update</button>
+      </div>
+    </div>
+  </div>
+
+</div>

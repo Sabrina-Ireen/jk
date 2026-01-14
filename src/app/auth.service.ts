@@ -7,19 +7,9 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  register(data: any) {
-    return this.http.post(`${this.api}/register`, data);
-  }
+  register(data: any) { return this.http.post(`${this.api}/register`, data); }
+  login(data: any) { return this.http.post(`${this.api}/login`, data); }
 
-  login(data: any) {
-    return this.http.post(`${this.api}/login`, data);
-  }
-
-  getUser() {
-    return JSON.parse(localStorage.getItem('user') || '{}');
-  }
-
-  logout() {
-    localStorage.removeItem('user');
-  }
+  getUser() { return JSON.parse(localStorage.getItem('user') || '{}'); }
+  logout() { localStorage.removeItem('user'); }
 }

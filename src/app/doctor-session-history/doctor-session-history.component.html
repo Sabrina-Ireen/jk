@@ -1,0 +1,73 @@
+<div class="min-h-screen bg-[#FFF6F1] py-10 px-4">
+  <div class="max-w-6xl mx-auto">
+
+    <!-- Header -->
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">
+      Session History
+    </h2>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="text-center text-gray-500">
+      Loading sessions...
+    </div>
+
+    <!-- No Data -->
+    <div *ngIf="!loading && sessions.length === 0"
+         class="text-center text-gray-500 bg-white p-6 rounded-2xl shadow">
+      No session history found.
+    </div>
+
+    <!-- Sessions -->
+    <div *ngIf="sessions.length > 0" class="space-y-4">
+
+      <div *ngFor="let s of sessions"
+           class="bg-white rounded-3xl shadow-md p-6 flex flex-col gap-3">
+
+        <div class="flex justify-between items-center">
+          <h3 class="text-lg font-semibold text-gray-800">
+            {{ s.patientName }}
+          </h3>
+          <span class="text-sm text-gray-500">
+            {{ s.appointmentDate | date:'mediumDate' }} • {{ s.slotTime }}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+
+          <div>
+            <p class="font-semibold text-gray-600">Diagnosis</p>
+            <p class="text-gray-800">
+              {{ s.diagnosis || '—' }}
+            </p>
+          </div>
+
+          <div>
+            <p class="font-semibold text-gray-600">Medicines</p>
+            <p class="text-gray-800">
+              {{ s.medicines || '—' }}
+            </p>
+          </div>
+
+          <div>
+            <p class="font-semibold text-gray-600">Notes</p>
+            <p class="text-gray-800">
+              {{ s.notes || '—' }}
+            </p>
+          </div>
+
+        </div>
+
+        <div *ngIf="s.sessionLink"
+             class="pt-3 border-t">
+          <a [href]="s.sessionLink"
+             target="_blank"
+             class="text-[#FF7D54] font-semibold hover:underline">
+            Join Session
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

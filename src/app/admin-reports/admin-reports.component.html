@@ -1,0 +1,109 @@
+<div class="min-h-screen p-8">
+
+  <!-- Page Header -->
+  <div class="mb-10">
+    <h1 class="text-4xl font-serif font-bold text-gray-900">
+      Reports <span class="text-[#FF7D54]">Overview</span>
+    </h1>
+    <p class="text-gray-500 mt-2">
+      Real-time administrative insights from the database
+    </p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+    <!-- Total Appointments -->
+    <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
+        Total Appointments
+      </p>
+      <h2 class="text-4xl font-bold mt-3 text-gray-900">
+        {{ reports.totalAppointments }}
+      </h2>
+    </div>
+
+    <!-- Completed -->
+    <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
+        Completed
+      </p>
+      <h2 class="text-4xl font-bold mt-3 text-green-600">
+        {{ reports.completed }}
+      </h2>
+    </div>
+
+    <!-- Pending -->
+    <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
+        Pending
+      </p>
+      <h2 class="text-4xl font-bold mt-3 text-yellow-500">
+        {{ reports.pending }}
+      </h2>
+    </div>
+
+    <!-- Cancelled -->
+    <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
+        Cancelled
+      </p>
+      <h2 class="text-4xl font-bold mt-3 text-red-500">
+        {{ reports.cancelled }}
+      </h2>
+    </div>
+
+  </div>
+
+  <!-- Top Doctors Section -->
+  <div class="mt-14 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+
+    <div class="p-8 border-b border-gray-50">
+      <h3 class="text-2xl font-bold text-gray-900">
+        Top Doctors by Appointments
+      </h3>
+      <p class="text-gray-500 mt-1">
+        Doctors ranked based on total appointments
+      </p>
+    </div>
+
+    <div class="p-8 overflow-x-auto">
+
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="text-left border-b">
+            <th class="pb-3 text-gray-500 font-semibold">
+              Doctor Name
+            </th>
+            <th class="pb-3 text-gray-500 font-semibold">
+              Total Appointments
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            *ngFor="let doctor of topDoctors"
+            class="border-b last:border-0"
+          >
+            <td class="py-4 font-medium text-gray-900">
+              {{ doctor.DoctorName }}
+            </td>
+            <td class="py-4 text-gray-700">
+              {{ doctor.TotalAppointments }}
+            </td>
+          </tr>
+
+          <!-- Empty state -->
+          <tr *ngIf="topDoctors.length === 0">
+            <td colspan="2" class="py-6 text-center text-gray-400 italic">
+              No report data available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+</div>

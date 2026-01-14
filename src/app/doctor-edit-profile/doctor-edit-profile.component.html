@@ -1,0 +1,41 @@
+<div class="min-h-screen bg-[#FFF6F1] flex items-center justify-center px-4">
+  <div class="w-full max-w-2xl bg-white rounded-3xl shadow-md p-8 space-y-6">
+
+    <h2 class="text-2xl font-bold text-gray-800">
+      Edit Doctor Profile
+    </h2>
+
+    <input
+      [(ngModel)]="profile.fullName"
+      class="w-full border p-3 rounded-xl focus:ring-2 focus:ring-[#FF7D54] outline-none"
+      placeholder="Full Name" />
+
+    <input
+      [(ngModel)]="profile.email"
+      disabled
+      class="w-full border p-3 rounded-xl bg-gray-100"
+      placeholder="Email" />
+
+    <input
+      [(ngModel)]="profile.specialization"
+      class="w-full border p-3 rounded-xl focus:ring-2 focus:ring-[#FF7D54] outline-none"
+      placeholder="Specialization" />
+
+    <label class="flex items-center gap-3">
+      <input
+        type="checkbox"
+        [(ngModel)]="profile.isActive"
+        class="w-4 h-4 accent-[#FF7D54]" />
+      <span class="text-gray-700">Active</span>
+    </label>
+
+    <div class="flex justify-end gap-3">
+      <button
+        (click)="save()"
+        class="px-6 py-2 bg-[#FF7D54] text-white rounded-xl hover:opacity-90 transition">
+        Save Changes
+      </button>
+    </div>
+
+  </div>
+</div>
