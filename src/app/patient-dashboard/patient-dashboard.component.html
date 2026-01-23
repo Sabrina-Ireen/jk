@@ -15,10 +15,8 @@
 
     <!-- Actions -->
     <div class="flex gap-6 items-center">
-     
-      <button
-        (click)="logout()"
-        class="bg-[#0F172A] text-white px-5 py-2 rounded-full">
+
+      <button (click)="logout()" class="bg-[#0F172A] text-white px-5 py-2 rounded-full">
         Logout
       </button>
     </div>
@@ -34,50 +32,83 @@
     </h1>
 
     <p class="text-gray-500 mt-4">
-      Here are your upcoming appointments and quick actions.
+      Here are your appointments and quick actions.
     </p>
 
-    <!-- Cards -->
+    <!-- Top Recommendation -->
+    <div *ngIf="topRecommendation"
+      class="mt-12 bg-white rounded-3xl p-10 shadow-sm border border-gray-100 text-center max-w-lg mx-auto">
+
+      <h2 class="text-3xl font-bold text-gray-900 mb-1">{{ topRecommendation.fullName }}</h2>
+      <p class="text-gray-500 text-lg mb-8">{{ topRecommendation.specialization }}</p>
+
+      <p class="text-gray-900 font-medium mb-8">{{ topRecommendation.email }}</p>
+
+      <p class="text-gray-700 mb-6">
+        <span class="font-semibold">Available:</span> {{ topRecommendation.availableDays || 'N/A' }}
+      </p>
+
+      <button (click)="goToDoctors()"
+        class="bg-[#0F172A] text-white px-10 py-4 rounded-full font-semibold hover:bg-black transition-colors">
+        Book Appointment
+      </button>
+    </div>
+
+    <!-- Cards Grid -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
 
       <!-- Upcoming Appointments -->
-      <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-left">
-        <h3 class="text-xl font-semibold mb-4">
-          Upcoming Appointments
-        </h3>
-        <p class="text-gray-400">
-          No upcoming appointments
-        </p>
+      <div
+        class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-left flex flex-col justify-between h-full">
+        <div>
+          <h3 class="text-xl font-semibold mb-4">
+            My Appointments
+          </h3>
+          <p class="text-gray-500 mb-8">
+            Check your scheduled sessions and access your join links.
+          </p>
+          <!-- Quick view of next appointment if exists -->
+          <div *ngIf="appointments.length > 0" class="mb-4 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+            <p class="text-sm font-bold text-gray-900">{{ appointments[0].doctorName }}</p>
+            <p class="text-xs text-gray-500">{{ appointments[0].appointmentDate | date:'dd MMM yyyy' }}</p>
+          </div>
+        </div>
+
+        <button (click)="goToUpcoming()" class="bg-[#0F172A] text-white w-full py-3 rounded-full font-semibold">
+          View My Appointments
+        </button>
       </div>
 
-      <!-- Book Appointment -->
-      <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-left">
-        <h3 class="text-xl font-semibold mb-4">
-          Book an Appointment
-        </h3>
+      <!-- Book Appointment Card -->
+      <div
+        class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-left flex flex-col justify-between h-full">
+        <div>
+          <h3 class="text-xl font-semibold mb-4">
+            Book an Appointment
+          </h3>
+          <p class="text-gray-500 mb-6">
+            Quickly schedule an appointment with your preferred doctor.
+          </p>
+        </div>
 
-        <p class="text-gray-500 mb-6">
-          Quickly schedule an appointment with your preferred doctor.
-        </p>
-
-        <button
-          class="bg-[#FF7D54] text-white w-full py-3 rounded-full font-semibold hover:opacity-90">
+        <button (click)="goToDoctors()" class="bg-[#FF7D54] text-white w-full py-3 rounded-full font-semibold">
           Book Now
         </button>
       </div>
 
       <!-- AI Assessment -->
-      <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-left">
-        <h3 class="text-xl font-semibold mb-4">
-          AI Assessment
-        </h3>
+      <div
+        class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 text-left flex flex-col justify-between h-full">
+        <div>
+          <h3 class="text-xl font-semibold mb-4">
+            Assessment
+          </h3>
+          <p class="text-gray-500 mb-6">
+            Take a quick quiz to get personalized doctor recommendations.
+          </p>
+        </div>
 
-        <p class="text-gray-500 mb-6">
-          Take a quick quiz to get personalized doctor recommendations.
-        </p>
-
-        <button
-          (click)="startQuiz()"
+        <button (click)="startQuiz()"
           class="bg-[#0F172A] text-white w-full py-3 rounded-full font-semibold hover:bg-black">
           Start Quiz
         </button>
@@ -86,4 +117,4 @@
     </div>
   </div>
 
-</div> 
+</div>

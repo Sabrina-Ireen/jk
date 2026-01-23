@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { AdminService } from '../admin/admin.service';
 
 @Component({
   selector: 'app-admin-schedules',
@@ -11,15 +11,14 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AdminSchedulesComponent implements OnInit {
 
-  apiUrl = 'https://localhost:7051/api/Admin/Schedules';
-
   schedules: any[] = [];
+  doctors: any[] = [];
 
   showAddScheduleModal = false;
   showEditScheduleModal = false;
 
   newSchedule = {
-    doctorId: 0,
+    doctorId: '',
     day: '',
     startTime: '',
     endTime: ''
@@ -27,74 +26,123 @@ export class AdminSchedulesComponent implements OnInit {
 
   editSchedule: any = {};
 
-  constructor(private http: HttpClient, private cdr:ChangeDetectorRef) {}
+  constructor(private adminService: AdminService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.loadSchedules();
+    this.loadDoctors();
   }
 
-  // ===== GET =====
+  // --------------------
+  // Load schedules
+  // --------------------
   loadSchedules() {
-    this.http.get<any[]>(this.apiUrl).subscribe(res => {
-      this.schedules = res;
-      this.cdr.detectChanges();
+    this.adminService.getSchedules().subscribe({
+      next: (res) => {
+        this.schedules = res;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error(err)
     });
   }
 
-  // ===== ADD =====
+  // --------------------
+  // Load doctors for dropdown
+  // --------------------
+  loadDoctors() {
+    this.adminService.getDoctors().subscribe({
+      next: (res) => this.doctors = res,
+      error: (err) => console.error(err)
+    });
+  }
+
+  // --------------------
+  // Add Schedule
+  // --------------------
   openAddScheduleForm() {
-    this.newSchedule = {
-      doctorId: 0,
-      day: '',
-      startTime: '',
-      endTime: ''
-    };
+    this.newSchedule = { doctorId: '', day: '', startTime: '', endTime: '' };
     this.showAddScheduleModal = true;
   }
 
   addSchedule() {
-    this.http.post(this.apiUrl, this.newSchedule).subscribe(() => {
-      this.closeModal();
-      this.loadSchedules();
-      this.cdr.detectChanges();
+    if (!this.newSchedule.doctorId || !this.newSchedule.day || !this.newSchedule.startTime || !this.newSchedule.endTime) {
+      alert('All fields are required');
+      return;
+    }
+
+    this.adminService.addSchedule(this.newSchedule).subscribe({
+      next: () => {
+        alert('Schedule added successfully!');
+        this.closeModal();
+        this.loadSchedules();
+      },
+      error: (err) => console.error('Error adding schedule', err)
     });
   }
 
-  // ===== EDIT =====
+  // --------------------
+  // Edit Schedule
+  // --------------------
   openEditScheduleForm(schedule: any) {
-    this.editSchedule = { ...schedule };
-    this.showEditScheduleModal = true;
-  }
+  // Map DoctorId from backend to doctorId used in ngModel
+  this.editSchedule = {
+    ScheduleId: schedule.ScheduleId,
+    doctorId: schedule.DoctorId, // must match the select [(ngModel)]
+    Day: schedule.Day,
+    StartTime: schedule.StartTime,
+    EndTime: schedule.EndTime
+  };
+  this.showEditScheduleModal = true;
+}
+
 
   updateSchedule() {
-    this.http.put(
-      `${this.apiUrl}/${this.editSchedule.ScheduleId}`,
-      {
-        doctorId: this.editSchedule.DoctorId,
-        day: this.editSchedule.Day,
-        startTime: this.editSchedule.StartTime,
-        endTime: this.editSchedule.EndTime
-      }
-    ).subscribe(() => {
-      this.closeModal();
-      this.loadSchedules();
-      this.cdr.detectChanges();
-    });
+  // 🔹 Validate required fields
+  if (!this.editSchedule.doctorId || !this.editSchedule.Day || !this.editSchedule.StartTime || !this.editSchedule.EndTime) {
+    alert("All fields are required");
+    return;
   }
 
-  // ===== DELETE =====
+  // 🔹 Prepare payload
+  const payload = {
+    doctorId: this.editSchedule.doctorId,
+    day: this.editSchedule.Day,
+    startTime: this.editSchedule.StartTime,
+    endTime: this.editSchedule.EndTime
+  };
+
+  // 🔹 Call service to update
+  this.adminService.updateSchedule(this.editSchedule.ScheduleId, payload).subscribe({
+    next: () => {
+      alert("Schedule updated successfully!");
+      this.closeModal(); // Close modal after success
+      this.loadSchedules();  // Refresh list
+    },
+    error: (err) => console.error("Error updating schedule", err)
+  });
+}
+
+
+  // --------------------
+  // Delete Schedule
+  // --------------------
   deleteSchedule(id: number) {
-    if (!confirm('Delete this schedule?')) return;
+    if (!confirm('Are you sure you want to delete this schedule?')) return;
 
-    this.http.delete(`${this.apiUrl}/${id}`).subscribe(() => {
-      this.loadSchedules();
-      this.cdr.detectChanges();
+    this.adminService.deleteSchedule(id).subscribe({
+      next: () => {
+        alert('Schedule deleted successfully!');
+        this.loadSchedules();
+      },
+      error: (err) => console.error(err)
     });
   }
 
-  // ===== MODAL =====
+  // --------------------
+  // Close modals
+  // --------------------
   closeModal() {
     this.showAddScheduleModal = false;
     this.showEditScheduleModal = false;
   }
-}  
+}

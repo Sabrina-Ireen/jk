@@ -14,9 +14,7 @@
 
     <!-- Actions -->
     <div class="flex gap-6 items-center">
-      <button
-        (click)="logout()"
-        class="bg-[#0F172A] text-white px-5 py-2 rounded-full hover:opacity-90 transition">
+      <button (click)="logout()" class="bg-[#0F172A] text-white px-5 py-2 rounded-full hover:opacity-90 transition">
         Logout
       </button>
     </div>
@@ -25,30 +23,36 @@
   <br>
   <!-- Heading -->
   <h1 class="text-5xl text-center font-serif font-bold mb-2 text-gray-900">
-    Welcome back, 
+    Welcome back,
     <span class="text-[#FF7D54]">{{ user.fullName }}</span>
   </h1>
   <br>
   <br>
   <!-- Main Content: Left & Right -->
   <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6 px-6 mt-6">
-    
+
     <!-- Left: Upcoming Appointments -->
     <div class="lg:w-2/3 bg-white p-6 rounded-3xl shadow-md sticky top-28 self-start">
-      
+
       <!-- Subtitle -->
       <h2 class="text-lg text-gray-500 font-medium mb-6 text-center text-gray-500">
         Here are your upcoming appointments
-      </h2> 
+      </h2>
 
       <div *ngIf="slots.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div *ngFor="let slot of slots" class="bg-[#FFF5F0] p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100">
+        <div *ngFor="let slot of slots"
+          class="bg-[#FFF5F0] p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100">
           <div>
             <h3 class="text-lg font-semibold text-gray-800">{{ slot.patientName }}</h3>
-            <p class="text-gray-500">Time: {{ slot.slotTime }}</p>
+            <p class="text-gray-500 text-sm">
+              <span class="font-medium text-gray-700">Date:</span> 
+{{ slot.appointmentDate | date:'dd MMM yyyy' }}
+              <br>
+              <span class="font-medium text-gray-700">Time:</span> {{ slot.slotTime }}
+            </p>
           </div>
           <a [href]="slot.sessionLink" target="_blank"
-             class="bg-[#FF7D54] text-white px-4 py-2 rounded-full hover:opacity-90 transition">
+            class="bg-[#FF7D54] text-white px-4 py-2 rounded-full hover:opacity-90 transition">
             Join
           </a>
         </div>
@@ -64,21 +68,19 @@
       <div class="bg-white p-6 rounded-3xl shadow-md flex flex-col gap-4">
         <h2 class="text-2xl font-bold mb-2 text-[#FF7D54]">Quick Actions</h2>
 
-      <a routerLink="/doctor/add-prescription"
-   class="bg-orange-300 text-white p-4 rounded-xl text-center font-semibold hover:bg-[#e66a45] transition">
-  Add Prescription / Notes
-</a>
+        <a routerLink="/doctor/add-prescription"
+          class="bg-orange-300 text-white p-4 rounded-xl text-center font-semibold hover:bg-[#e66a45] transition">
+          Add Prescription / Notes
+        </a>
 
         <a routerLink="/doctor/session-history"
-   class="bg-orange-400 text-white p-4 rounded-xl text-center font-semibold hover:bg-[#e66a45] transition">
-   View Session History
-</a>
+          class="bg-orange-400 text-white p-4 rounded-xl text-center font-semibold hover:bg-[#e66a45] transition">
+          View Session History
+        </a>
 
-        <button
-  routerLink="/doctor/edit-profile"
-  class="w-full p-3 rounded-xl bg-[#FF7D54] text-white font-semibold">
-  Edit Profile
-</button>
+        <button routerLink="/doctor/edit-profile" class="w-full p-3 rounded-xl bg-[#FF7D54] text-white font-semibold">
+          Edit Profile
+        </button>
 
       </div>
     </div>

@@ -1,30 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
 export interface Specialization {
   id: number;
   name: string;
 }
+
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
 
-  private apiUrl = 'https://localhost:7051/api/Admin';
-  private specializationUrl = 'https://localhost:7051/api/Specializations';
+  private apiUrl = 'http://localhost:5120/api/Admin';
+  private specializationUrl = 'http://localhost:5120/api/Specializations';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  // --------------------
   // COUNTS
-  // --------------------
   getCounts(): Observable<any> {
     return this.http.get(`${this.apiUrl}/Counts`);
   }
 
-  // --------------------
   // APPOINTMENTS
-  // --------------------
   getAppointments(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/Appointments`);
   }
@@ -41,9 +39,7 @@ export class AdminService {
     return this.http.delete<any>(`${this.apiUrl}/Appointments/${id}`);
   }
 
-  // --------------------
   // DOCTORS
-  // --------------------
   getDoctors(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/Doctors`);
   }
@@ -60,9 +56,7 @@ export class AdminService {
     return this.http.delete<any>(`${this.apiUrl}/Doctors/${id}`);
   }
 
-  // --------------------
   // PATIENTS
-  // --------------------
   getPatients(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/Patients`);
   }
@@ -79,9 +73,7 @@ export class AdminService {
     return this.http.delete<any>(`${this.apiUrl}/Patients/${id}`);
   }
 
-  // --------------------
   // SCHEDULES
-  // --------------------
   getSchedules(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/Schedules`);
   }
@@ -98,9 +90,7 @@ export class AdminService {
     return this.http.delete<any>(`${this.apiUrl}/Schedules/${id}`);
   }
 
-  // --------------------
-  // SPECIALIZATIONS ✅
-  // --------------------
+  // SPECIALIZATIONS
   getSpecializations(): Observable<Specialization[]> {
     return this.http.get<Specialization[]>(this.specializationUrl);
   }
@@ -117,9 +107,7 @@ export class AdminService {
     return this.http.delete(`${this.specializationUrl}/${id}`);
   }
 
-  // --------------------
   // REPORTS
-  // --------------------
   getReports(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/Reports`);
   }

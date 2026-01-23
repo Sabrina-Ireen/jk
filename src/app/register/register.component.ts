@@ -12,8 +12,13 @@ import { AuthService } from '../auth.service';
 })
 export class RegisterComponent {
   model = { fullName: '', email: '', password: '' };
+  showPassword = false;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router) { }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
 
   register() {
     if (!this.model.fullName || !this.model.email || !this.model.password) {

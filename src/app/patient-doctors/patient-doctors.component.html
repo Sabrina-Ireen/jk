@@ -1,0 +1,45 @@
+<div class="min-h-screen bg-[#FDFBF7] p-6">
+  <h1 class="text-3xl font-bold mb-6 text-center">Available Doctors</h1>
+
+  <div class="mb-6 flex justify-center gap-4">
+    <select [(ngModel)]="selectedSpecialization" (change)="filterDoctors()" class="border rounded-lg p-2 w-64">
+      <option value="">All Specializations</option>
+      <option>Child & Adolescent</option>
+      <option>Depression</option>
+      <option>Anxiety & Stress</option>
+      <option>Couples Therapy</option>
+      <option>Addiction</option>
+      <option>Psychosomatic</option>
+      <option>General Adult</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="text-center">Loading doctors...</div>
+  <div *ngIf="error" class="text-center text-red-500">{{ error }}</div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div *ngFor="let doc of filteredDoctors"
+      class="group flex items-center p-6 bg-white rounded-2xl shadow hover:shadow-lg transition border border-gray-200">
+
+      <div
+        class="w-16 h-16 bg-[#FF7D54]/20 text-[#FF7D54] font-bold text-2xl rounded-full flex items-center justify-center mr-4">
+        {{ doc.fullName.charAt(0) }}
+
+      </div>
+
+      <div class="flex-1">
+        <h2 class="text-xl font-bold">{{ doc.fullName || 'Doctor Name' }}</h2>
+        <p class="text-[#FF7D54] font-medium">{{ doc.specialization }}</p>
+        <p class="text-gray-500 text-sm">{{ doc.email }}</p>
+        <p class="text-sm text-gray-600 mt-1">
+          <span class="font-bold text-[#FF7D54]">Available:</span> {{ doc.availableDays || 'Contact for schedule' }}
+        </p>
+      </div>
+
+      <button (click)="bookDoctor(doc)"
+        class="ml-4 px-4 py-2 rounded-full bg-[#FF7D54] text-white font-semibold hover:opacity-90 transition">
+        Book
+      </button>
+    </div>
+  </div>
+</div>

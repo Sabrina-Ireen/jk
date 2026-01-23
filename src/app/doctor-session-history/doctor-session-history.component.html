@@ -1,73 +1,29 @@
-<div class="min-h-screen bg-[#FFF6F1] py-10 px-4">
-  <div class="max-w-6xl mx-auto">
+<div class="min-h-screen bg-[#FFF6F1] flex justify-center px-4 py-6">
+  <div class="w-full max-w-2xl space-y-8">
 
-    <!-- Header -->
-    <h2 class="text-3xl font-bold text-gray-800 mb-6">
-      Session History
-    </h2>
+    <h1 class="text-3xl font-bold text-gray-900 text-center mb-6">Session History</h1>
 
-    <!-- Loading -->
-    <div *ngIf="loading" class="text-center text-gray-500">
-      Loading sessions...
-    </div>
+    <div *ngFor="let s of sessions" class="relative pl-12">
+      <!-- Vertical line -->
+      <div class="absolute left-5 top-0 h-full border-l-2 border-[#FF7D54]"></div>
 
-    <!-- No Data -->
-    <div *ngIf="!loading && sessions.length === 0"
-         class="text-center text-gray-500 bg-white p-6 rounded-2xl shadow">
-      No session history found.
-    </div>
+      <!-- Dot -->
+      <div class="absolute left-0 top-1 w-4 h-4 bg-[#FF7D54] rounded-full"></div>
 
-    <!-- Sessions -->
-    <div *ngIf="sessions.length > 0" class="space-y-4">
-
-      <div *ngFor="let s of sessions"
-           class="bg-white rounded-3xl shadow-md p-6 flex flex-col gap-3">
-
-        <div class="flex justify-between items-center">
-          <h3 class="text-lg font-semibold text-gray-800">
-            {{ s.patientName }}
-          </h3>
-          <span class="text-sm text-gray-500">
-            {{ s.appointmentDate | date:'mediumDate' }} • {{ s.slotTime }}
-          </span>
+      <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 space-y-2">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-semibold text-gray-800">{{ s.patientName }}</h3>
+          <span class="text-sm text-gray-500">{{ s.appointmentDate | date:'mediumDate' }}</span>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-
-          <div>
-            <p class="font-semibold text-gray-600">Diagnosis</p>
-            <p class="text-gray-800">
-              {{ s.diagnosis || '—' }}
-            </p>
-          </div>
-
-          <div>
-            <p class="font-semibold text-gray-600">Medicines</p>
-            <p class="text-gray-800">
-              {{ s.medicines || '—' }}
-            </p>
-          </div>
-
-          <div>
-            <p class="font-semibold text-gray-600">Notes</p>
-            <p class="text-gray-800">
-              {{ s.notes || '—' }}
-            </p>
-          </div>
-
-        </div>
-
-        <div *ngIf="s.sessionLink"
-             class="pt-3 border-t">
-          <a [href]="s.sessionLink"
-             target="_blank"
-             class="text-[#FF7D54] font-semibold hover:underline">
-            Join Session
-          </a>
-        </div>
-
+        <p class="text-gray-600"><strong>Time:</strong> {{ s.slotTime }}</p>
+        <p class="text-gray-600"><strong>Diagnosis:</strong> {{ s.diagnosis || '—' }}</p>
+        <p class="text-gray-600"><strong>Medicines:</strong> {{ s.medicines || '—' }}</p>
+        <p class="text-gray-600"><strong>Notes:</strong> {{ s.notes || '—' }}</p>
+        <a *ngIf="s.sessionLink" [href]="s.sessionLink" target="_blank"
+           class="mt-2 inline-block text-[#FF7D54] font-semibold hover:underline">
+          Join Session
+        </a>
       </div>
-
     </div>
   </div>
 </div>

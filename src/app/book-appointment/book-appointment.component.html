@@ -1,0 +1,185 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+
+  <form class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-6">
+
+    <h2 class="text-2xl font-bold text-center text-gray-700">
+      Book Appointment
+    </h2>
+
+    <!-- DATE -->
+    <div>
+      <label class="block text-gray-600 mb-1">Select Date</label>
+      <input type="date" [(ngModel)]="selectedDate" name="date" (change)="loadAvailableSlots()"
+        class="w-full border rounded-lg p-3" />
+    </div>
+
+    <!-- TIME SLOT -->
+    <div>
+      <label class="block text-gray-600 font-medium mb-2">Select Time Slot</label>
+      <select [(ngModel)]="selectedSlot" name="slot" class="w-full border rounded-lg p-3">
+        <option *ngFor="let slot of availableSlots" [value]="slot">{{ slot }}</option>
+      </select>
+      <p *ngIf="selectedDate && availableSlots.length === 0" class="text-red-500 text-sm mt-2">
+        No available slots for this date
+      </p>
+    </div>
+
+    <!-- PATIENT DETAILS -->
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Name -->
+      <div class="col-span-2">
+        <label class="block text-gray-600 mb-1">Patient Name</label>
+        <input type="text" [(ngModel)]="patientName" name="patientName" class="w-full border rounded-lg p-3" />
+      </div>
+
+      <!-- Mobile -->
+      <div>
+        <label class="block text-gray-600 mb-1">Mobile</label>
+        <input type="text" [(ngModel)]="mobile" name="mobile" placeholder="017xxxxxxxx"
+          class="w-full border rounded-lg p-3" />
+      </div>
+
+      <!-- Age -->
+      <div>
+        <label class="block text-gray-600 mb-1">Age</label>
+        <input type="text" [(ngModel)]="age" name="age" placeholder="Ex: 25" class="w-full border rounded-lg p-3" />
+      </div>
+
+      <!-- Gender -->
+      <div class="col-span-2">
+        <label class="block text-gray-600 mb-1">Gender</label>
+        <select [(ngModel)]="gender" name="gender" class="w-full border rounded-lg p-3">
+          <option value="" disabled selected>Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- FEE -->
+    <div class="mb-4 text-center">
+      <p class="text-lg font-semibold text-gray-700">
+        Consultation Fee: ৳{{ doctor?.fee }}
+      </p>
+    </div>
+
+    <button type="button" (click)="openPaymentModal()"
+      class="w-full bg-orange-500 text-white py-3 rounded-lg font-bold">
+      Book & Pay
+    </button>
+
+  </form>
+
+</div>
+
+<!-- PAYMENT MODAL -->
+<!-- PAYMENT MODAL -->
+<div *ngIf="showPaymentModal"
+  class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all">
+
+  <div class="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl transform transition-all scale-100 relative">
+
+    <!-- Close Button -->
+    <button (click)="closePaymentModal()"
+      class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <div class="text-center mb-8">
+      <h3 class="text-2xl font-bold text-gray-800 mb-2">Select Payment Method</h3>
+      <p class="text-gray-500 text-sm">Choose how you'd like to pay for your appointment</p>
+    </div>
+
+    <!-- Payment Options Grid -->
+    <div class="space-y-4 mb-8">
+
+      <!-- Bkash -->
+      <label class="block relative group cursor-pointer">
+        <input type="radio" name="payment" value="Bkash" [(ngModel)]="paymentMethod" class="peer sr-only">
+        <div
+          class="p-4 rounded-2xl border-2 border-gray-100 bg-gray-50 flex items-center gap-4 transition-all hover:bg-white hover:shadow-md peer-checked:border-[#FF7D54] peer-checked:bg-[#FFF5F0] peer-checked:shadow-lg">
+          <div
+            class="w-12 h-12 rounded-xl bg-pink-500 flex items-center justify-center text-white font-bold text-xl shadow-sm">
+            B
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800">Bkash</h4>
+            <p class="text-xs text-gray-500">Pay with your Bkash account</p>
+          </div>
+          <div
+            class="absolute right-4 w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-[#FF7D54] peer-checked:bg-[#FF7D54] flex items-center justify-center transition-all">
+            <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+        </div>
+      </label>
+
+      <!-- Rocket -->
+      <label class="block relative group cursor-pointer">
+        <input type="radio" name="payment" value="Rocket" [(ngModel)]="paymentMethod" class="peer sr-only">
+        <div
+          class="p-4 rounded-2xl border-2 border-gray-100 bg-gray-50 flex items-center gap-4 transition-all hover:bg-white hover:shadow-md peer-checked:border-[#FF7D54] peer-checked:bg-[#FFF5F0] peer-checked:shadow-lg">
+          <div
+            class="w-12 h-12 rounded-xl bg-purple-500 flex items-center justify-center text-white font-bold text-xl shadow-sm">
+            R
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800">Rocket</h4>
+            <p class="text-xs text-gray-500">Pay with your Rocket account</p>
+          </div>
+          <div
+            class="absolute right-4 w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-[#FF7D54] peer-checked:bg-[#FF7D54] flex items-center justify-center transition-all">
+            <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+        </div>
+      </label>
+
+      <!-- Nagad -->
+      <label class="block relative group cursor-pointer">
+        <input type="radio" name="payment" value="Nagad" [(ngModel)]="paymentMethod" class="peer sr-only">
+        <div
+          class="p-4 rounded-2xl border-2 border-gray-100 bg-gray-50 flex items-center gap-4 transition-all hover:bg-white hover:shadow-md peer-checked:border-[#FF7D54] peer-checked:bg-[#FFF5F0] peer-checked:shadow-lg">
+          <div
+            class="w-12 h-12 rounded-xl bg-orange-600 flex items-center justify-center text-white font-bold text-xl shadow-sm">
+            N
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800">Nagad</h4>
+            <p class="text-xs text-gray-500">Pay with your Nagad account</p>
+          </div>
+          <div
+            class="absolute right-4 w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-[#FF7D54] peer-checked:bg-[#FF7D54] flex items-center justify-center transition-all">
+            <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+        </div>
+      </label>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="flex gap-4">
+      <button
+        class="flex-1 py-3.5 rounded-xl border border-gray-200 font-semibold text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition"
+        (click)="closePaymentModal()">
+        Cancel
+      </button>
+      <button
+        class="flex-1 bg-[#FF7D54] text-white py-3.5 rounded-xl font-bold shadow-lg shadow-orange-200 hover:shadow-orange-300 hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all"
+        (click)="confirmPayment()">
+        Pay Now
+      </button>
+    </div>
+
+  </div>
+</div>

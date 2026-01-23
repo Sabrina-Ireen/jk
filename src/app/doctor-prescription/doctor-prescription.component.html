@@ -1,46 +1,47 @@
-<div class="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-  <div class="bg-white rounded-3xl shadow-lg w-full max-w-lg p-8 space-y-6">
-    <h2 class="text-2xl font-bold text-gray-800 text-center">Add Prescription / Notes</h2>
+<div class="min-h-screen bg-[#FFF6F1] flex items-center justify-center p-6">
+  <div class="bg-white rounded-3xl shadow-lg w-full max-w-2xl p-8 space-y-6">
 
-    <input
-      [(ngModel)]="prescription.patientId"
-      placeholder="Patient ID"
+    <h2 class="text-2xl font-bold text-gray-800 text-center">
+      Add Prescription / Notes
+    </h2>
+
+    <select name="patientId" [(ngModel)]="prescription.patientId"
       class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#FF7D54] outline-none"
-    />
+      [ngClass]="prescription.patientId ? 'text-black' : 'text-gray-400'">
+      <option [ngValue]="null" disabled selected>
+        Select Patient
+      </option>
+      <option *ngFor="let patient of patients" [ngValue]="patient.patientId">
+        {{ patient.fullName }}
+      </option>
+    </select>
 
-    <input
-      [(ngModel)]="prescription.diagnosis"
-      placeholder="Diagnosis"
+
+
+    <!-- Diagnosis Input -->
+    <input [(ngModel)]="prescription.diagnosis" placeholder="Diagnosis"
+      class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#FF7D54] outline-none" />
+
+    <!-- Notes -->
+    <textarea [(ngModel)]="prescription.notes" placeholder="Doctor Notes"
       class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#FF7D54] outline-none"
-    />
+      rows="4"></textarea>
 
-    <textarea
-      [(ngModel)]="prescription.notes"
-      placeholder="Doctor Notes"
+    <!-- Medicines -->
+    <textarea [(ngModel)]="prescription.medicines" placeholder="Medicines"
       class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#FF7D54] outline-none"
-      rows="4"
-    ></textarea>
+      rows="3"></textarea>
 
-    <textarea
-      [(ngModel)]="prescription.medicines"
-      placeholder="Medicines"
-      class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#FF7D54] outline-none"
-      rows="3"
-    ></textarea>
-
+    <!-- Buttons -->
     <div class="flex justify-end gap-4">
-      <button
-        (click)="cancel()"
-        class="px-5 py-2 bg-gray-300 rounded-xl hover:bg-gray-400 transition"
-      >
+      <button (click)="cancel()" class="px-5 py-2 bg-gray-300 rounded-xl hover:bg-gray-400 transition">
         Cancel
       </button>
-      <button
-        (click)="savePrescription()"
-        class="px-5 py-2 bg-[#FF7D54] text-white rounded-xl hover:opacity-90 transition"
-      >
+      <button (click)="savePrescription()"
+        class="px-5 py-2 bg-[#FF7D54] text-white rounded-xl hover:opacity-90 transition">
         Save
       </button>
     </div>
+
   </div>
 </div>

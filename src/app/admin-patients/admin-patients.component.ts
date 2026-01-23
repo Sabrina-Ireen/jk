@@ -42,9 +42,8 @@ export class AdminPatientsComponent implements OnInit {
   addPatient() {
     this.adminService.addPatient(this.newPatient).subscribe({
       next: (res) => {
-        this.patients.push(res);
+        this.loadPatients();
         this.showAddPatientModal = false;
-        this.cdr.detectChanges();
       },
       error: (err) => console.error(err)
     });

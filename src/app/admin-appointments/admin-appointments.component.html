@@ -1,11 +1,9 @@
 <div class="p-6 space-y-4">
   <h1 class="text-3xl font-bold mb-4">Appointments</h1>
 
-  <!-- Add Button -->
+  <!-- Add Appointment Button -->
   <div class="flex justify-end mb-4">
-    <button
-      (click)="openAddForm()"
-      class="bg-[#FF7D54] text-white px-4 py-2 rounded-2xl hover:bg-[#e66a45] transition">
+    <button (click)="openAddForm()" class="bg-[#FF7D54] text-white px-4 py-2 rounded-2xl hover:bg-[#e66a45] transition">
       + Add Appointment
     </button>
   </div>
@@ -24,60 +22,90 @@
           <th class="px-4 py-2 text-left text-gray-500 uppercase">Actions</th>
         </tr>
       </thead>
-
       <tbody class="divide-y divide-gray-200">
         <tr *ngFor="let app of appointments">
           <td class="px-4 py-2">{{ app.Id }}</td>
-          <td class="px-4 py-2">{{ app.PatientName }} ({{ app.PatientId }})</td>
-          <td class="px-4 py-2">{{ app.DoctorName }} ({{ app.DoctorId }})</td>
-          <td class="px-4 py-2">{{ app.Date | date:'yyyy-MM-dd' }}</td>
+          <td class="px-4 py-2">{{ app.PatientName }}</td>
+          <td class="px-4 py-2">{{ app.DoctorName }}</td>
+          <td class="px-4 py-2">{{ app.Date | date:'shortDate' }}</td>
           <td class="px-4 py-2">{{ app.Time }}</td>
           <td class="px-4 py-2">{{ app.Status }}</td>
           <td class="px-4 py-2 space-x-2">
-            <button (click)="openEditForm(app)" class="px-2 py-1 bg-blue-500 text-white rounded">Edit</button>
-            <button (click)="deleteAppointment(app.Id)" class="px-2 py-1 bg-red-500 text-white rounded">Delete</button>
+            <button (click)="openEditForm(app)"
+              class="px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600">Edit</button>
+            <button (click)="deleteAppointment(app.Id)"
+              class="px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ADD MODAL -->
-  <div *ngIf="showAddModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div class="bg-white p-6 rounded-lg w-96 space-y-4">
-      <h2 class="text-xl font-bold">Add Appointment</h2>
+  <!-- Add Appointment Modal -->
+  <div *ngIf="showAddModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 space-y-2">
+      <h2 class="text-xl font-bold mb-2">Add Appointment</h2>
 
-      <input [(ngModel)]="newAppointment.patientId" type="number" placeholder="Patient ID" class="w-full border p-2 rounded">
-      <input [(ngModel)]="newAppointment.doctorId" type="number" placeholder="Doctor ID" class="w-full border p-2 rounded">
-      <input [(ngModel)]="newAppointment.date" type="date" class="w-full border p-2 rounded">
-      <input [(ngModel)]="newAppointment.time" type="time" class="w-full border p-2 rounded">
+      <select [(ngModel)]="newAppointment.patientId" class="w-full p-2 border rounded">
+        <option value="" disabled selected>Select Patient</option>
+        <option *ngFor="let patient of patients" [value]="patient.Id">{{ patient.FullName }}</option>
+      </select>
+
+      <select [(ngModel)]="newAppointment.doctorId" class="w-full p-2 border rounded">
+        <option value="" disabled selected>Select Doctor</option>
+        <option *ngFor="let doctor of doctors" [value]="doctor.id">{{ doctor.fullName }}</option>
+      </select>
+
+      <input [(ngModel)]="newAppointment.date" type="date" class="w-full p-2 border rounded" />
+      <input [(ngModel)]="newAppointment.time" type="time" class="w-full p-2 border rounded" />
+      <input [(ngModel)]="newAppointment.sessionLink" placeholder="Session Link" class="w-full p-2 border rounded" />
+
+      <select [(ngModel)]="newAppointment.status" class="w-full p-2 border rounded">
+        <option>Pending</option>
+        <option>Scheduled</option>
+        <option>Completed</option>
+        <option>Cancelled</option>
+      </select>
 
       <div class="flex justify-end space-x-2">
-        <button (click)="closeModal()" class="px-4 py-2 rounded bg-gray-300">Cancel</button>
+        <button (click)="closeModal()" class="px-4 py-2 rounded bg-gray-400 text-white">Cancel</button>
         <button (click)="addAppointment()" class="px-4 py-2 rounded bg-[#FF7D54] text-white">Add</button>
       </div>
     </div>
   </div>
 
-  <!-- EDIT MODAL -->
-  <div *ngIf="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div class="bg-white p-6 rounded-lg w-96 space-y-4">
-      <h2 class="text-xl font-bold">Edit Appointment</h2>
+  <!-- Edit Appointment Modal -->
+  <div *ngIf="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 space-y-2">
+      <h2 class="text-xl font-bold mb-2">Edit Appointment</h2>
 
-      <input [(ngModel)]="editAppointment.PatientId" type="number" class="w-full border p-2 rounded">
-      <input [(ngModel)]="editAppointment.DoctorId" type="number" class="w-full border p-2 rounded">
-      <input [(ngModel)]="editAppointment.Date" type="date" class="w-full border p-2 rounded">
-      <input [(ngModel)]="editAppointment.Time" type="time" class="w-full border p-2 rounded">
-      <select [(ngModel)]="editAppointment.Status" class="w-full border p-2 rounded">
-        <option value="Pending">Pending</option>
-        <option value="Scheduled">Scheduled</option>
-        <option value="Completed">Completed</option>
-        <option value="Cancelled">Cancelled</option>
+      <select [(ngModel)]="editAppointment.PatientId" class="w-full p-2 border rounded">
+        <option value="" disabled>Select Patient</option>
+        <option *ngFor="let patient of patients" [value]="patient.Id">{{ patient.FullName }}</option>
+      </select>
+
+      <select [(ngModel)]="editAppointment.DoctorId" class="w-full p-2 border rounded">
+        <option value="" disabled>Select Doctor</option>
+        <option *ngFor="let doctor of doctors" [value]="doctor.id">{{ doctor.fullName }}</option>
+      </select>
+
+      <input [(ngModel)]="editAppointment.Date" type="date" class="w-full p-2 border rounded" />
+      <input [(ngModel)]="editAppointment.Time" type="time" class="w-full p-2 border rounded" />
+      <input [(ngModel)]="editAppointment.SessionLink" placeholder="Session Link" class="w-full p-2 border rounded" />
+
+      <select [(ngModel)]="editAppointment.Status" class="w-full p-2 border rounded">
+        <option>Pending</option>
+        <option>Scheduled</option>
+        <option>Completed</option>
+        <option>Cancelled</option>
       </select>
 
       <div class="flex justify-end space-x-2">
-        <button (click)="closeModal()" class="px-4 py-2 rounded bg-gray-300">Cancel</button>
-        <button (click)="updateAppointment()" class="px-4 py-2 rounded bg-blue-500 text-white">Update</button>
+        <button (click)="closeModal()" class="px-4 py-2 rounded bg-gray-400 text-white">Cancel</button>
+        <button (click)="updateAppointment()" class="px-4 py-2 rounded bg-blue-500 text-white">
+          Update
+        </button>
+
       </div>
     </div>
   </div>

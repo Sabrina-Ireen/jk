@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 
 interface QuizOption {
   text: string;
-  scores: { [category: string]: number };
+  scores: { [specialization: string]: number }; // specialization names
 }
 
 interface QuizQuestion {
@@ -23,191 +23,105 @@ interface QuizQuestion {
 export class AiQuizComponent {
   currentStep = 0;
 
- questions: QuizQuestion[] = [
-  // 1️⃣ Age Question
-  {
-    question: "What is your age group?",
-    options: [
-      { text: "Under 18", scores: { "Child & Adolescent": 3 } },
-      { text: "18–59", scores: { "General Adult": 3 } },
-      { text: "60+", scores: { "Geriatric": 3 } }
-    ]
-  },
+  questions: QuizQuestion[] = [
+    {
+      question: "Do you often feel sad, hopeless, or lose interest in activities?",
+      options: [
+        { text: "Never", scores: {} },
+        { text: "Sometimes", scores: { "Depression": 1 } },
+        { text: "Often", scores: { "Depression": 2 } },
+        { text: "Always", scores: { "Depression": 3 } }
+      ]
+    },
+    {
+      question: "Do you frequently feel anxious, stressed, or panicky?",
+      options: [
+        { text: "Never", scores: {} },
+        { text: "Sometimes", scores: { "Anxiety & Stress": 1 } },
+        { text: "Often", scores: { "Anxiety & Stress": 2 } },
+        { text: "Always", scores: { "Anxiety & Stress": 3 } }
+      ]
+    },
+    {
+      question: "Do you experience obsessive thoughts or compulsive behaviors?",
+      options: [
+        { text: "No", scores: {} },
+        { text: "Mild", scores: { "General Adult": 1 } },
+        { text: "Moderate", scores: { "General Adult": 2 } },
+        { text: "Severe", scores: { "General Adult": 3 } }
+      ]
+    },
+    {
+      question: "Do you face conflicts or stress in family or romantic relationships?",
+      options: [
+        { text: "No", scores: {} },
+        { text: "Mild", scores: { "Couples Therapy": 1 } },
+        { text: "Moderate", scores: { "Couples Therapy": 2 } },
+        { text: "Severe", scores: { "Couples Therapy": 3 } }
+      ]
+    },
+    {
+      question: "Do you have a history of alcohol or substance use?",
+      options: [
+        { text: "None", scores: {} },
+        { text: "Occasionally", scores: { "Addiction": 1 } },
+        { text: "Often", scores: { "Addiction": 2 } },
+        { text: "Very frequently", scores: { "Addiction": 3 } }
+      ]
+    },
+    {
+      question: "Are you experiencing memory issues, concentration problems, or neurological symptoms?",
+      options: [
+        { text: "No", scores: {} },
+        { text: "Mild", scores: { "Neuropsychiatry": 1 } },
+        { text: "Moderate", scores: { "Neuropsychiatry": 2 } },
+        { text: "Severe", scores: { "Neuropsychiatry": 3 } }
+      ]
+    },
+    {
+      question: "Do you have physical symptoms like fatigue or pain without clear medical reason?",
+      options: [
+        { text: "No", scores: {} },
+        { text: "Mild", scores: { "Psychosomatic": 1 } },
+        { text: "Moderate", scores: { "Psychosomatic": 2 } },
+        { text: "Severe", scores: { "Psychosomatic": 3 } }
+      ]
+    },
+    {
+      question: "Are you under 18 years old or facing childhood/adolescent behavioral challenges?",
+      options: [
+        { text: "No", scores: {} },
+        { text: "Yes", scores: { "Child & Adolescent": 3 } }
+      ]
+    },
+    {
+      question: "Do you have thoughts of self-harm or suicide?",
+      options: [
+        { text: "No", scores: {} },
+        { text: "Sometimes", scores: { "Depression": 2 } },
+        { text: "Often", scores: { "Depression": 3 } },
+        { text: "Always", scores: { "Depression": 3 } }
+      ]
+    },
+    {
+      question: "Do you feel socially isolated or have difficulty connecting with others?",
+      options: [
+        { text: "No", scores: {} },
+        { text: "Sometimes", scores: { "Child & Adolescent": 1, "General Adult": 1 } },
+        { text: "Often", scores: { "Child & Adolescent": 2, "General Adult": 2 } },
+        { text: "Always", scores: { "Child & Adolescent": 3, "General Adult": 3 } }
+      ]
+    }
+  ];
 
-  // 2️⃣ Depression
-  {
-    question: "Do you often feel sad or depressed?",
-    options: [
-      { text: "Never", scores: {} },
-      { text: "Sometimes", scores: { "Depression": 1 } },
-      { text: "Often", scores: { "Depression": 2 } },
-      { text: "Always", scores: { "Depression": 3 } }
-    ]
-  },
+  constructor(private router: Router) { }
 
-  //3️⃣ Anxiety & Stress
-  {
-    question: "Do you feel anxious or stressed frequently?",
-    options: [
-      { text: "Never", scores: {} },
-      { text: "Sometimes", scores: { "Anxiety & Stress": 1 } },
-      { text: "Often", scores: { "Anxiety & Stress": 2 } },
-      { text: "Always", scores: { "Anxiety & Stress": 3 } }
-    ]
-  },
-
-  {
-    question: "Do you experience panic attacks?",
-    options: [
-      { text: "Never", scores: {} },
-      { text: "Rarely", scores: { "Anxiety & Stress": 1 } },
-      { text: "Sometimes", scores: { "Anxiety & Stress": 2 } },
-      { text: "Often", scores: { "Anxiety & Stress": 3 } }
-    ]
-  },
-
-  // 4️⃣ Suicide
-  {
-    question: "Do you have thoughts of self-harm or suicide?",
-    options: [
-      { text: "Never", scores: {} },
-      { text: "Sometimes", scores: { "Depression": 2 } },
-      { text: "Often", scores: { "Depression": 3, "General Adult": 1 } },
-      { text: "Always", scores: { "Depression": 3 } }
-    ]
-  },
-
-  // 5️⃣ Sleep
-  {
-    question: "Do you have trouble sleeping?",
-    options: [
-      { text: "Never", scores: {} },
-      { text: "Sometimes", scores: { "Sleep": 1 } },
-      { text: "Often", scores: { "Sleep": 2 } },
-      { text: "Always", scores: { "Sleep": 3 } }
-    ]
-  },
-
-  // 6️⃣ Family / Relationship
-  {
-    question: "Do you have family or relationship conflicts?",
-    options: [
-      { text: "No", scores: {} },
-      { text: "Mild", scores: { "Couples Therapy": 1 } },
-      { text: "Moderate", scores: { "Couples Therapy": 2 } },
-      { text: "Severe", scores: { "Couples Therapy": 3 } }
-    ]
-  },
-
-  // 7️⃣ Addiction
-  {
-    question: "Do you have a history of substance use?",
-    options: [
-      { text: "None", scores: {} },
-      { text: "Occasionally", scores: { "Addiction": 1 } },
-      { text: "Often", scores: { "Addiction": 2 } },
-      { text: "Very frequently", scores: { "Addiction": 3 } }
-    ]
-  },
-
-  // 8️⃣ Cognitive / Memory
-  {
-    question: "Do you experience memory or cognitive problems?",
-    options: [
-      { text: "None", scores: {} },
-      { text: "Mild", scores: { "Neuropsychiatry": 1 } },
-      { text: "Moderate", scores: { "Neuropsychiatry": 2 } },
-      { text: "Severe", scores: { "Neuropsychiatry": 3 } }
-    ]
-  },
-
-  // 9️⃣ Obsessive / Compulsive
-  {
-    question: "Do you have obsessive or compulsive behaviors?",
-    options: [
-      { text: "No", scores: {} },
-      { text: "Mild", scores: { "General Adult": 1 } },
-      { text: "Moderate", scores: { "General Adult": 2 } },
-      { text: "Severe", scores: { "General Adult": 3 } }
-    ]
-  },
-
-  // 10️⃣ Social Withdrawal
-  {
-    question: "Do you experience social withdrawal?",
-    options: [
-      { text: "Never", scores: {} },
-      { text: "Sometimes", scores: { "Child & Adolescent": 1 } },
-      { text: "Often", scores: { "Child & Adolescent": 2 } },
-      { text: "Always", scores: { "Child & Adolescent": 3 } }
-    ]
-  },
-
-  // 11️⃣ Appetite
-  {
-    question: "Do you have appetite changes?",
-    options: [
-      { text: "No", scores: {} },
-      { text: "Mild", scores: { "Psychosomatic": 1 } },
-      { text: "Moderate", scores: { "Psychosomatic": 2 } },
-      { text: "Severe", scores: { "Psychosomatic": 3 } }
-    ]
-  },
-
-  // 12️⃣ Hyperactivity
-  {
-    question: "Do you have hyperactivity or impulsivity?",
-    options: [
-      { text: "None", scores: {} },
-      { text: "Mild", scores: { "Child & Adolescent": 1 } },
-      { text: "Moderate", scores: { "Child & Adolescent": 2 } },
-      { text: "Severe", scores: { "Child & Adolescent": 3 } }
-    ]
-  },
-
-  // 13️⃣ Chronic Physical Illness
-  {
-    question: "Do you have chronic physical illness?",
-    options: [
-      { text: "No", scores: {} },
-      { text: "Minor", scores: { "Psychosomatic": 1 } },
-      { text: "Chronic", scores: { "Psychosomatic": 2 } },
-      { text: "Severe", scores: { "Psychosomatic": 3 } }
-    ]
-  },
-
-  // 14️⃣ Family Psychiatric History
-  {
-    question: "Do you have family psychiatric history?",
-    options: [
-      { text: "None", scores: {} },
-      { text: "Mild", scores: { "General Adult": 1, "Child & Adolescent": 1 } },
-      { text: "Moderate", scores: { "General Adult": 2, "Child & Adolescent": 2 } },
-      { text: "Severe", scores: { "General Adult": 3, "Child & Adolescent": 3 } }
-    ]
-  },
-
-  // 15️⃣ Anxiety Triggers
-  {
-    question: "Do you experience anxiety before exams, work, or presentations?",
-    options: [
-      { text: "Never", scores: {} },
-      { text: "Sometimes", scores: { "Anxiety & Stress": 1 } },
-      { text: "Often", scores: { "Anxiety & Stress": 2 } },
-      { text: "Always", scores: { "Anxiety & Stress": 3 } }
-    ]
+  onOptionSelect() {
+    this.next();
   }
-];
-
-
-  constructor(private router: Router) {}
 
   next() {
-    const currentQuestion = this.questions[this.currentStep];
-    if (!currentQuestion.answerText) {
-      alert("Please select an answer before continuing.");
-      return;
-    }
+    if (!this.questions[this.currentStep].answerText) return;
     if (this.currentStep < this.questions.length - 1) {
       this.currentStep++;
     } else {
@@ -220,31 +134,54 @@ export class AiQuizComponent {
   }
 
   getSelectedOption(q: QuizQuestion) {
-    debugger;
     return q.options.find(opt => opt.text === q.answerText);
   }
 
   submitQuiz() {
-    debugger;
-    const categoryScores: { [key: string]: number } = {};
+    // ✅ 1. Initialize all specializations to 0
+    const allSpecializations = [
+      "Depression", "Anxiety & Stress", "General Adult",
+      "Couples Therapy", "Addiction", "Neuropsychiatry",
+      "Psychosomatic", "Child & Adolescent"
+    ];
+
+    const scores: { [name: string]: number } = {};
+    allSpecializations.forEach(s => scores[s] = 0);
+
+    // 2. Sum points
     this.questions.forEach(q => {
       const selected = this.getSelectedOption(q);
       if (selected) {
-        for (let category in selected.scores) {
-          categoryScores[category] = (categoryScores[category] || 0) + selected.scores[category];
+        for (const name in selected.scores) {
+          scores[name] += selected.scores[name];
         }
       }
     });
 
-    // Find highest scoring specialization
-    const recommendedCategory = Object.keys(categoryScores).reduce((a, b) =>
-      categoryScores[a] > categoryScores[b] ? a : b
-    );
+    // 3. Determine recommended specialization
+    let recommendedSpecialization = "General Adult"; // Default fallback
 
-    console.log("Scores:", categoryScores);
-    console.log("Recommended:", recommendedCategory);
+    // Calculate max score
+    let maxScore = 0;
+    let winner = "General Adult";
 
-    // Navigate to recommendation page
-    this.router.navigate(['/doctor-recommendation'], { state: { category: recommendedCategory } });
+    allSpecializations.forEach(spec => {
+      if (scores[spec] > maxScore) {
+        maxScore = scores[spec];
+        winner = spec;
+      }
+    });
+
+    // Priority / Overrides
+    if (scores["Addiction"] >= 3) {
+      recommendedSpecialization = "Addiction";
+    } else if (scores["Depression"] >= 3 && this.questions[8].answerText && this.questions[8].answerText !== "No") {
+      recommendedSpecialization = "Depression";
+    } else if (maxScore > 0) {
+      recommendedSpecialization = winner;
+    }
+
+    // 4. Navigate to result page
+    this.router.navigate(['/ai-quiz-result'], { state: { specialization: recommendedSpecialization } });
   }
 }

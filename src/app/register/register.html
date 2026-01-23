@@ -1,7 +1,8 @@
 <div class="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-6">
   <div class="bg-white p-10 rounded-[2.5rem] shadow-lg w-full max-w-md border border-gray-100">
-    
-    <div class="w-12 h-12 bg-[#FF7D54] rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg shadow-orange-100">
+
+    <div
+      class="w-12 h-12 bg-[#FF7D54] rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg shadow-orange-100">
       <span class="text-white text-xl">♥</span>
     </div>
 
@@ -10,17 +11,39 @@
 
     <div class="space-y-4">
       <input type="text" placeholder="Full Name" [(ngModel)]="model.fullName"
-             class="w-full px-6 py-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-[#FF7D54] outline-none">
+        class="w-full px-6 py-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-[#FF7D54] outline-none">
 
       <input type="email" placeholder="Email" [(ngModel)]="model.email"
-             class="w-full px-6 py-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-[#FF7D54] outline-none">
+        class="w-full px-6 py-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-[#FF7D54] outline-none">
 
-      <input type="password" placeholder="Password" [(ngModel)]="model.password"
-             class="w-full px-6 py-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-[#FF7D54] outline-none">
+      <!-- Password -->
+      <div class="relative">
+        <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="model.password" placeholder="Password"
+          class="w-full px-6 py-4 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-[#FF7D54] outline-none">
+
+        <button *ngIf="model.password.length > 0" (click)="togglePassword()" type="button" class="absolute right-4 top-1/2 -translate-y-1/2
+                 w-6 h-6 flex items-center justify-center
+                 text-gray-500 hover:text-gray-900">
+          <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="none"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+
+          <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5"
+            fill="currentColor">
+            <path
+              d="M12 5C7.523 5 3.732 7.943 2.458 12c1.274 4.057 5.065 7 9.542 7s8.268-2.943 9.542-7C20.268 7.943 16.477 5 12 5zM12 17a5 5 0 110-10 5 5 0 010 10z" />
+            <circle cx="12" cy="12" r="2.5" fill="white" />
+          </svg>
+        </button>
+      </div>
     </div>
 
-    <button (click)="register()" 
-            class="w-full mt-8 bg-gray-900 text-white py-4 rounded-2xl font-semibold hover:bg-black shadow-lg transition-all">
+    <button (click)="register()"
+      class="w-full mt-8 bg-gray-900 text-white py-4 rounded-2xl font-semibold hover:bg-black shadow-lg transition-all">
       Register
     </button>
 

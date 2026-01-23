@@ -1,36 +1,49 @@
 <div class="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-6">
-  <div class="bg-white p-10 rounded-2xl shadow-lg w-full max-w-lg border border-gray-100">
+  <div class="max-w-xl w-full bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
 
-    <h2 class="text-2xl font-bold text-center mb-2">AI Mental Health Quiz</h2>
+    <!-- Title -->
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">
+      Mental Health Quiz
+    </h2>
 
-    <p class="text-gray-500 text-sm mb-4 text-center">
+    <!-- Progress -->
+    <p class="text-gray-500 text-center mb-6">
       Question {{ currentStep + 1 }} of {{ questions.length }}
     </p>
 
-    <p class="mb-4 font-semibold">{{ questions[currentStep].question }}</p>
+    <!-- Question -->
+    <div class="mb-6">
+      <p class="text-lg font-medium text-gray-700 text-center">
+        {{ questions[currentStep].question }}
+      </p>
+    </div>
 
-    <div class="space-y-3">
-      <label *ngFor="let option of questions[currentStep].options" class="flex items-center gap-3 cursor-pointer">
-        <input 
-          type="radio" 
-          name="answer" 
-          [(ngModel)]="questions[currentStep].answerText" 
-          [value]="option.text" 
-          class="form-radio"
-        >
-        <span>{{ option.text }}</span>
+    <!-- Options -->
+    <div class="flex flex-col space-y-3 mb-6">
+      <label *ngFor="let option of questions[currentStep].options" 
+             class="flex items-center p-3 border rounded-xl hover:bg-[#FFFAF0] cursor-pointer transition shadow-sm">
+        <input type="radio"
+               name="option"
+               [value]="option.text"
+               [(ngModel)]="questions[currentStep].answerText"
+               (change)="onOptionSelect()"
+               class="mr-3 h-5 w-5 text-[#FF7D54] focus:ring-[#FF7D54] border-gray-300" />
+        <span class="text-gray-700 font-medium">{{ option.text }}</span>
       </label>
     </div>
 
-    <div class="flex justify-between mt-6">
-      <button *ngIf="currentStep > 0" (click)="previous()" class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400">Previous</button>
-     <button 
-  (click)="next()" 
-  [disabled]="!questions[currentStep].answerText"
-  class="px-4 py-2 bg-[#FF7D54] text-white rounded-lg hover:bg-[#e66a45] disabled:opacity-50 disabled:cursor-not-allowed">
-  {{ currentStep === questions.length - 1 ? 'Submit' : 'Next' }}
-</button>
-
+    <!-- Navigation Buttons -->
+    <div class="flex justify-between">
+      <button (click)="previous()" 
+              [disabled]="currentStep === 0"
+              class="px-4 py-2 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">
+        Previous
+      </button>
+      <button (click)="next()" 
+              [disabled]="!questions[currentStep].answerText"
+              class="px-4 py-2 rounded-xl bg-[#FF7D54] text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition">
+        {{ currentStep === questions.length - 1 ? 'Submit' : 'Next' }}
+      </button>
     </div>
 
   </div>

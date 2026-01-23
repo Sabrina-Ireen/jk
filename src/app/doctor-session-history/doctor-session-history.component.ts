@@ -16,16 +16,19 @@ export class DoctorSessionHistoryComponent implements OnInit {
   constructor(private dashboardService: DoctorDashboardService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.loadSessions();
+  }
 
+  loadSessions() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (!user?.id) {
       console.error('Doctor not logged in');
       return;
     }
 
+    this.loading = true;
     this.dashboardService.getDoctorSessions(user.id).subscribe({
       next: (res: DoctorSessionDto[]) => {
-        console.log('Sessions from backend:', res);
         this.sessions = res;
         this.loading = false;
         this.cdr.detectChanges();
@@ -36,4 +39,5 @@ export class DoctorSessionHistoryComponent implements OnInit {
       }
     });
   }
+
 }

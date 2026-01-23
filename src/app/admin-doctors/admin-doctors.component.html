@@ -2,8 +2,7 @@
   <h1 class="text-3xl font-bold mb-4">Doctors</h1>
 
   <div class="flex justify-end mb-4">
-    <button 
-      (click)="openAddDoctorForm()"
+    <button (click)="openAddDoctorForm()"
       class="bg-[#FF7D54] text-white px-4 py-2 rounded-2xl hover:bg-[#e66a45] transition">
       + Add Doctor
     </button>
@@ -24,14 +23,15 @@
       </thead>
       <tbody class="divide-y divide-gray-200">
         <tr *ngFor="let doctor of doctors">
-          <td class="px-4 py-2">{{ doctor.Id }}</td>
-          <td class="px-4 py-2">{{ doctor.FullName }}</td>
-          <td class="px-4 py-2">{{ doctor.Email }}</td>
-          <td class="px-4 py-2">{{ doctor.Specialization }}</td>
-          <td class="px-4 py-2">{{ doctor.CreatedAt | date:'short' }}</td>
+          <td class="px-4 py-2">{{ doctor.id || doctor.Id }}</td>
+          <td class="px-4 py-2">{{ doctor.fullName || doctor.FullName }}</td>
+          <td class="px-4 py-2">{{ doctor.email || doctor.Email }}</td>
+          <td class="px-4 py-2">{{ doctor.specialization || doctor.Specialization }}</td>
+          <td class="px-4 py-2">{{ (doctor.createdAt || doctor.CreatedAt) | date:'short' }}</td>
           <td class="px-4 py-2 space-x-2">
             <button (click)="openEditDoctorForm(doctor)" class="px-2 py-1 bg-blue-500 text-white rounded">Edit</button>
-            <button (click)="deleteDoctor(doctor.Id)" class="px-2 py-1 bg-red-500 text-white rounded">Delete</button>
+            <button (click)="deleteDoctor(doctor.id || doctor.Id)"
+              class="px-2 py-1 bg-red-500 text-white rounded">Delete</button>
           </td>
         </tr>
       </tbody>
@@ -42,10 +42,16 @@
   <div *ngIf="showAddDoctorModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
     <div class="bg-white p-6 rounded-lg w-96 space-y-4">
       <h2 class="text-xl font-bold">Add Doctor</h2>
-      <input [(ngModel)]="newDoctor.FullName" placeholder="Full Name" class="w-full border p-2 rounded">
-      <input [(ngModel)]="newDoctor.Email" placeholder="Email" class="w-full border p-2 rounded">
-      <input [(ngModel)]="newDoctor.Specialization" placeholder="Specialization" class="w-full border p-2 rounded">
-      <input [(ngModel)]="newDoctor.Password" placeholder="Password" type="password" class="w-full border p-2 rounded">
+      <input [(ngModel)]="newDoctor.fullName" placeholder="Full Name" class="w-full border p-2 rounded">
+      <input [(ngModel)]="newDoctor.email" placeholder="Email" class="w-full border p-2 rounded">
+
+      <!-- Specialization Dropdown -->
+      <select [(ngModel)]="newDoctor.specialization" class="w-full border p-2 rounded">
+        <option value="" disabled selected>Select Specialization</option>
+        <option *ngFor="let spec of specializations" [value]="spec.name">{{ spec.name }}</option>
+      </select>
+
+      <input [(ngModel)]="newDoctor.password" placeholder="Password" type="password" class="w-full border p-2 rounded">
       <div class="flex justify-end space-x-2">
         <button (click)="closeAddModal()" class="px-4 py-2 rounded bg-gray-300">Cancel</button>
         <button (click)="addDoctor()" class="px-4 py-2 rounded bg-[#FF7D54] text-white">Add</button>
@@ -57,9 +63,15 @@
   <div *ngIf="showEditDoctorModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
     <div class="bg-white p-6 rounded-lg w-96 space-y-4">
       <h2 class="text-xl font-bold">Edit Doctor</h2>
-      <input [(ngModel)]="editDoctor.FullName" placeholder="Full Name" class="w-full border p-2 rounded">
-      <input [(ngModel)]="editDoctor.Email" placeholder="Email" class="w-full border p-2 rounded">
-      <input [(ngModel)]="editDoctor.Specialization" placeholder="Specialization" class="w-full border p-2 rounded">
+      <input [(ngModel)]="editDoctor.fullName" placeholder="Full Name" class="w-full border p-2 rounded">
+      <input [(ngModel)]="editDoctor.email" placeholder="Email" class="w-full border p-2 rounded">
+
+      <!-- Specialization Dropdown -->
+      <select [(ngModel)]="editDoctor.specialization" class="w-full border p-2 rounded">
+        <option value="" disabled>Select Specialization</option>
+        <option *ngFor="let spec of specializations" [value]="spec.name">{{ spec.name }}</option>
+      </select>
+
       <div class="flex justify-end space-x-2">
         <button (click)="closeEditModal()" class="px-4 py-2 rounded bg-gray-300">Cancel</button>
         <button (click)="updateDoctor()" class="px-4 py-2 rounded bg-blue-500 text-white">Update</button>

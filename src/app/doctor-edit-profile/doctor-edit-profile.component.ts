@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DoctorDashboardService, DoctorProfile } from '../doctor-dashboard/doctor-dashboard.service';
 
 @Component({
@@ -21,7 +22,7 @@ export class DoctorEditProfileComponent implements OnInit {
 
   user = JSON.parse(localStorage.getItem('user') || '{}');
 
-  constructor(private dashboardService: DoctorDashboardService) {}
+  constructor(private dashboardService: DoctorDashboardService, private router: Router) {}
 
   ngOnInit(): void {
     this.dashboardService.getDoctorProfile(this.user.id)
@@ -29,7 +30,26 @@ export class DoctorEditProfileComponent implements OnInit {
   }
 
   save() {
-    this.dashboardService.updateDoctorProfile(this.user.id, this.profile)
-      .subscribe(() => alert('Profile updated successfully'));
-  }
+  const doctorId = this.user.id;
+
+  this.dashboardService.updateDoctorProfile(doctorId, this.profile).subscribe({
+    next: () => {
+      alert('Profile updated successfully');
+  this.router.navigate(['/doctor-dashboard']);
+      // Update localStorage so app shows new name/specialization
+      const updatedUser = { ...this.user, ...this.profile };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+
+      // Optional: refresh profile from backend to be safe
+      this.dashboardService.getDoctorProfile(doctorId).subscribe(res => {
+        this.profile = res;
+      });
+    },
+    error: (err) => {
+      console.error(err);
+      alert('Failed to update profile');
+    }
+  });
+}
+
 }

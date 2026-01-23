@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AiQuizResultComponent } from './ai-quiz-result.component';
+import { UpcomingAppointments } from './upcoming-appointments';
 
-describe('AiQuizResult', () => {
-  let component: AiQuizResultComponent;
-  let fixture: ComponentFixture<AiQuizResultComponent>;
+describe('UpcomingAppointments', () => {
+  let component: UpcomingAppointments;
+  let fixture: ComponentFixture<UpcomingAppointments>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AiQuizResultComponent]
+      imports: [UpcomingAppointments]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AiQuizResultComponent);
+    fixture = TestBed.createComponent(UpcomingAppointments);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

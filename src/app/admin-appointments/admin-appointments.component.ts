@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { AdminService } from '../admin/admin.service';
 
 @Component({
   selector: 'app-admin-appointments',
@@ -11,34 +11,39 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AdminAppointmentsComponent implements OnInit {
 
-  apiUrl = 'https://localhost:7051/api/Admin/Appointments';
-
   appointments: any[] = [];
+  patients: any[] = [];
+  doctors: any[] = [];
 
   showAddModal = false;
   showEditModal = false;
 
   newAppointment = {
-    patientId: 0,
-    doctorId: 0,
+    patientId: '',
+    doctorId: '',
     date: '',
     time: '',
+    sessionLink: '',
     status: 'Pending'
   };
 
   editAppointment: any = {};
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private adminService: AdminService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadAppointments();
+        this.loadPatients();
+    this.loadDoctors();
   }
 
-  // ===== GET all appointments =====
+  // ----------------
+  // Load Data
+  // ----------------
   loadAppointments() {
-    this.http.get<any[]>(this.apiUrl).subscribe(res => {
-      // Map backend fields to frontend fields
-      this.appointments = res.map(a => ({
+  this.adminService.getAppointments().subscribe(res => {
+    this.appointments = res
+      .map(a => ({
         Id: a.AppointmentId,
         PatientId: a.PatientId,
         PatientName: a.PatientName,
@@ -48,21 +53,32 @@ export class AdminAppointmentsComponent implements OnInit {
         Time: a.SlotTime,
         Status: a.Status,
         SessionLink: a.SessionLink
-      }));
-      this.cdr.detectChanges();
-    });
+      }))
+      // ✅ SORT BY ID ASC → NEW AT BOTTOM
+      .sort((a, b) => a.Id - b.Id);
+
+    this.cdr.detectChanges();
+  });
+}
+
+
+  loadPatients() {
+    this.adminService.getPatients().subscribe(res => this.patients = res);
   }
 
-  // ===== ADD =====
+  loadDoctors() {
+    this.adminService.getDoctors().subscribe(res => this.doctors = res);
+  }
+
+  // ----------------
+  // Add Appointment
+  // ----------------
   openAddForm() {
-    this.newAppointment = {
-      patientId: 0,
-      doctorId: 0,
-      date: '',
-      time: '',
-      status: 'Pending'
-    };
+    this.newAppointment = { patientId: '', doctorId: '', date: '', time: '', sessionLink: '', status: 'Pending' };
     this.showAddModal = true;
+
+    // Load dropdowns
+
   }
 
   addAppointment() {
@@ -71,57 +87,84 @@ export class AdminAppointmentsComponent implements OnInit {
       PatientId: this.newAppointment.patientId,
       AppointmentDate: this.newAppointment.date,
       SlotTime: this.newAppointment.time,
-      SessionLink: "",
+      SessionLink: this.newAppointment.sessionLink,
       Status: this.newAppointment.status
     };
 
-    this.http.post(this.apiUrl, payload).subscribe(() => {
+    this.adminService.addAppointment(payload).subscribe(() => {
       this.closeModal();
       this.loadAppointments();
       this.cdr.detectChanges();
     });
   }
 
-  // ===== EDIT =====
+  // ----------------
+  // Edit Appointment
+  // ----------------
   openEditForm(app: any) {
     this.editAppointment = { ...app };
     this.showEditModal = true;
+
+    // Load dropdowns
+ 
   }
 
   updateAppointment() {
-    const payload = {
-      DoctorId: this.editAppointment.DoctorId,
-      PatientId: this.editAppointment.PatientId,
-      AppointmentDate: this.editAppointment.Date,
-      SlotTime: this.editAppointment.Time,
-      SessionLink: this.editAppointment.SessionLink || "",
-      Status: this.editAppointment.Status
-    };
 
-    this.http.put(`${this.apiUrl}/${this.editAppointment.Id}`, payload).subscribe(() => {
+    console.log('EDIT CLICKED', this.editAppointment);
+  // 🔹 FORMAT DATE FOR SQL
+  const formattedDate = new Date(this.editAppointment.Date)
+    .toISOString()
+    .split('T')[0]; // yyyy-MM-dd
+
+  const payload = {
+    DoctorId: this.editAppointment.DoctorId,
+    PatientId: this.editAppointment.PatientId,
+    AppointmentDate: formattedDate,
+    SlotTime: this.editAppointment.Time,   // MUST be "HH:mm"
+    SessionLink: this.editAppointment.SessionLink || '',
+    Status: this.editAppointment.Status
+  };
+
+  console.log('Update Appointment Payload:', payload); // DEBUG
+
+  this.adminService.updateAppointment(this.editAppointment.Id, payload).subscribe({
+    next: () => {
+
+      // 🔹 UPDATE LOCAL ARRAY (like patient update)
+      const index = this.appointments.findIndex(
+        a => a.AppointmentId === this.editAppointment.Id
+      );
+
+      if (index !== -1) {
+        this.appointments[index] = {
+          ...this.appointments[index],
+          ...payload
+        };
+      }
+
       this.closeModal();
       this.loadAppointments();
-      this.cdr.detectChanges();
-    });
-  }
-
-  // ===== DELETE =====
- deleteAppointment(id: number) {
-  if (!confirm('Delete this appointment?')) return;
-
-  this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' }).subscribe({
-    next: () => {
-      // remove locally
-      this.appointments = this.appointments.filter(a => a.Id !== id);
     },
-    error: (err) => console.error(err)
+    error: (err) => {
+      console.error('Update appointment error:', err);
+      alert('Update failed');
+    }
   });
 }
 
 
+  // ----------------
+  // Delete Appointment
+  // ----------------
+  deleteAppointment(id: number) {
+    if (!confirm('Delete this appointment?')) return;
 
+    this.adminService.deleteAppointment(id).subscribe(() => this.loadAppointments());
+    this.loadAppointments();
+    this.cdr.detectChanges();
+  }
 
-  // ===== MODAL =====
   closeModal() {
     this.showAddModal = false;
     this.showEditModal = false;

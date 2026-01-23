@@ -1,23 +1,51 @@
-<div class="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-6">
-  <div class="bg-white p-10 rounded-2xl shadow-lg w-full max-w-lg text-center">
+<div class="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-6 font-sans">
+  <div class="max-w-2xl w-full bg-white p-10 rounded-2xl shadow-lg border border-gray-200">
 
-    <h2 class="text-2xl font-bold mb-4 text-gray-800">
-      AI Quiz Result
-    </h2>
-
-    <p class="text-gray-600 mb-2">
-      Based on your answers, we recommend:
-    </p>
-
-    <div class="text-xl font-semibold text-[#FF7D54] mb-6">
-      {{ category }}
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center justify-center w-12 h-12 bg-orange-50 rounded-xl mb-4">
+        <span class="text-[#FF7D54] text-2xl">🏆</span>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-2">Top Recommendation</h2>
+      <p class="text-gray-500">Meet your best match specialist based on your assessment.</p>
     </div>
 
-    <button
-      (click)="goToDoctors()"
-      class="w-full py-3 bg-[#FF7D54] text-white rounded-xl font-semibold hover:opacity-90 transition">
-      Find a Doctor
-    </button>
+    <div *ngIf="topDoctors && topDoctors.length > 0" class="space-y-4 mb-10">
+      <div *ngFor="let doc of topDoctors"
+        class="group flex items-center p-5 border rounded-xl hover:bg-[#FFF7F0] transition-all shadow-sm hover:border-[#FF7D54]/30">
 
+        <div
+          class="mr-5 h-16 w-16 bg-[#FF7D54] text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-lg">
+          {{ doc.name.charAt(0) }}
+        </div>
+
+        <div class="flex-1">
+          <h4 class="text-gray-800 font-bold text-lg leading-tight">{{ doc.name }}</h4>
+          <p class="text-[#FF7D54] text-sm font-medium">{{ doc.specialization }}</p>
+          <p class="text-gray-500 text-sm mt-1 mb-2">{{ doc.email }}</p>
+          <p class="text-sm text-gray-600 mt-1">
+            <span class="font-bold text-[#FF7D54]">Available:</span> {{ doc.availableDays || 'Contact for schedule' }}
+          </p>
+        </div>
+
+        <button (click)="bookAppointment(doc)"
+          class="ml-4 px-5 py-2 rounded-xl bg-[#FF7D54] text-white text-sm font-bold hover:opacity-90 transition transform active:scale-95 shadow-md">
+          Book
+        </button>
+      </div>
+    </div>
+
+    <!-- No Recommendation fallback -->
+    <div *ngIf="!loading && topDoctors.length === 0" class="text-center py-10">
+      <p class="text-gray-500 italic">No direct matches found for this specialization at the moment.</p>
+    </div>
   </div>
+
+  <div class="flex flex-col items-center border-t border-gray-100 pt-8">
+    <button (click)="goToDashboard()"
+      class="px-8 py-3 rounded-xl bg-gray-100 text-gray-600 font-medium hover:bg-gray-200 transition-colors">
+      Return to Dashboard
+    </button>
+    <p class="mt-4 text-xs text-gray-400">Retake the assessment anytime if you want better matches.</p>
+  </div>
+
 </div>

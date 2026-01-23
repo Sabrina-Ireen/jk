@@ -1,6 +1,6 @@
-<div class="min-h-screen p-8">
+<div class="min-h-screen p-8 bg-gray-50">
 
-  <!-- Page Header -->
+  <!-- Header -->
   <div class="mb-10">
     <h1 class="text-4xl font-serif font-bold text-gray-900">
       Reports <span class="text-[#FF7D54]">Overview</span>
@@ -10,11 +10,16 @@
     </p>
   </div>
 
-  <!-- Stats Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center text-gray-500 py-20">
+    Loading reports...
+  </div>
 
-    <!-- Total Appointments -->
-    <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+  <!-- Stats Cards -->
+  <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+    <!-- Total -->
+    <div class="bg-white p-8 rounded-[2rem] border shadow-sm">
       <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
         Total Appointments
       </p>
@@ -24,7 +29,7 @@
     </div>
 
     <!-- Completed -->
-    <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+    <div class="bg-white p-8 rounded-[2rem] border shadow-sm">
       <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
         Completed
       </p>
@@ -34,7 +39,7 @@
     </div>
 
     <!-- Pending -->
-    <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+    <div class="bg-white p-8 rounded-[2rem] border shadow-sm">
       <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
         Pending
       </p>
@@ -44,7 +49,7 @@
     </div>
 
     <!-- Cancelled -->
-    <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+    <div class="bg-white p-8 rounded-[2rem] border shadow-sm">
       <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
         Cancelled
       </p>
@@ -55,15 +60,15 @@
 
   </div>
 
-  <!-- Top Doctors Section -->
-  <div class="mt-14 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+  <!-- Top Doctors -->
+  <div *ngIf="!loading" class="mt-14 bg-white rounded-[2.5rem] border shadow-sm overflow-hidden">
 
-    <div class="p-8 border-b border-gray-50">
+    <div class="p-8 border-b">
       <h3 class="text-2xl font-bold text-gray-900">
         Top Doctors by Appointments
       </h3>
       <p class="text-gray-500 mt-1">
-        Doctors ranked based on total appointments
+        Ranked by total completed & scheduled appointments
       </p>
     </div>
 
@@ -76,27 +81,30 @@
               Doctor Name
             </th>
             <th class="pb-3 text-gray-500 font-semibold">
+              Specialization
+            </th>
+            <th class="pb-3 text-gray-500 font-semibold">
               Total Appointments
             </th>
           </tr>
         </thead>
 
         <tbody>
-          <tr
-            *ngFor="let doctor of topDoctors"
-            class="border-b last:border-0"
-          >
+          <tr *ngFor="let doctor of topDoctors" class="border-b last:border-0">
             <td class="py-4 font-medium text-gray-900">
               {{ doctor.DoctorName }}
+            </td>
+            <td class="py-4 text-gray-600">
+              {{ doctor.Specialization }}
             </td>
             <td class="py-4 text-gray-700">
               {{ doctor.TotalAppointments }}
             </td>
           </tr>
 
-          <!-- Empty state -->
+          <!-- Empty -->
           <tr *ngIf="topDoctors.length === 0">
-            <td colspan="2" class="py-6 text-center text-gray-400 italic">
+            <td colspan="3" class="py-6 text-center text-gray-400 italic">
               No report data available
             </td>
           </tr>
